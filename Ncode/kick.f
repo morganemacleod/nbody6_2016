@@ -91,6 +91,8 @@
           END IF
       END IF
 *     IF (KW.EQ.14) DISP = 0.0
+*     MMadd: set all kicks to zero
+      IF(KZ(25).EQ.3) DISP = 0.0
 *
 *       Use Henon's method for pairwise components (Douglas Heggie 22/5/97).
       DO 2 K = 1,2
