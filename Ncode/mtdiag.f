@@ -160,7 +160,7 @@ C save bh position
       enddo
 
       write(*,*) "Time: ", mttime
-      write(*,*) "BH found at: ", ibh, mbh,xbh
+      write(*,*) "BH found at: ", mttime,ibh, mbh,xbh,vxbh
 c$$$      write(*,*) "mtPARAMS: ", mtNTOT,mtNS,mtNB,mtIFIRST,mtN
 
  23   continue
