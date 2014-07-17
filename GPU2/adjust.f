@@ -184,7 +184,7 @@
 *
 *       Form close encounter distance from scale factor & density contrast.
 c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
-           RMIN = 4.0*RSCALE/(FLOAT(N)*MIN(RHOD,3.0D0)**0.333) !! MTadd modified for IMBH
+          RMIN = 4.0*RSCALE/(FLOAT(N)*MIN(RHOD,3.0D0)**0.333) !! MTadd modified for IMBH
 *       Include alternative expression based on core radius (experimental).
           IF (KZ(16).GT.1.AND.NC.LT.0.01*N) THEN
               RMIN = 0.01*RC/FLOAT(NC)**0.3333
@@ -412,8 +412,8 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
       TDUMP = TIME
 *      IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,2)
 c     MTadd alternating idump
-       IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,idump)
-       idump=5-idump
+      IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,idump)
+      idump=5-idump
 *       Check COMMON save on fort.1 at main output (#1 = 2).
       IF (KZ(1).EQ.2.AND.NSUB.EQ.0) THEN
           IF (IOUT.GT.0) CALL MYDUMP(1,1)
@@ -437,6 +437,7 @@ c     MTadd alternating idump
 *
    70 CONTINUE
 c____MTadd (custom diagnostic)
+      !write(*,*) "hello, calling wrapper" 
       call wrapper(RDENS)
       RETURN
 *
