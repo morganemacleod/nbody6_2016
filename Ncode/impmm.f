@@ -117,7 +117,7 @@
             ICOMP = I1
          END IF
          ! APPLY THE PERICENTER CRITERIA AND THAT PRIM=MBH
-        IF(PMIN.LT.3.D0*A0 .AND. BODY(IPRIM).EQ.BHMASS) THEN
+        IF(PMIN.LT.3.D0*A0 .AND. BODY(IPRIM).EQ.BODY1) THEN
             ! if this is a repeat entry 
             !  (ie less than 1 orb period) then skip
             IF((TIME+TOFF)-TWRITE.LT.PERIOD) GO TO 100
@@ -129,19 +129,19 @@
             NWRITE = NWRITE + 1
             WRITE (50,*) 'IMPACT',NWRITE,
      &           (TIME+TOFF),GAMMA(IPAIR),
-     &           NAME(IPRIM), BODY(IPRIM),
-     &           NAME(ICOMP), BODY(ICOMP),
+     &           NAME(IPRIM), BODY(IPRIM),KSTAR(IPRIM),RADIUS(IPRIM),
+     &           NAME(ICOMP), BODY(ICOMP),KSTAR(ICOMP),RADIUS(ICOMP),
      &           A0,ECC,PERIOD,
-     &           NAME(JCOMP),BODY(JCOMP),
+     &           NAME(JCOMP),BODY(JCOMP),KSTAR(JCOMP),RADIUS(JCOMP),
      &           PMIN,ECC1,VINF
             CALL FLUSH(50)
             TWRITE = TIME+TOFF
             ! now write another file with the positions and velocities
             ! Copy coordinates and velocities to local variables.
-            WRITE (51,*) 'IMPACT',NWRITE,
-     &           BODY(IPRIM),X(:,IPRIM),XDOT(:,IPRIM),
-     &           BODY(ICOMP),X(:,ICOMP),XDOT(:,ICOMP),
-     &           BODY(JCOMP),X(:,JCOMP),XDOT(:,JCOMP)
+            WRITE (51,*) 'IMPACT',NWRITE,(TIME+TOFF),
+     &           BODY(IPRIM),RADIUS(IPRIM),X(:,IPRIM),XDOT(:,IPRIM),
+     &           BODY(ICOMP),RADIUS(ICOMP),X(:,ICOMP),XDOT(:,ICOMP),
+     &           BODY(JCOMP),RADIUS(JCOMP),X(:,JCOMP),XDOT(:,JCOMP)
             CALL FLUSH(51)
          END IF
       END IF
