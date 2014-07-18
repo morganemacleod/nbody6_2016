@@ -124,7 +124,7 @@
               ZL2 = LOG10(LUM2)
               TE1 = 0.25*(ZL1 - 2.0*R1) + 3.7
               TE2 = 0.25*(ZL2 - 2.0*R2) + 3.7
-              WRITE (82,5)  NAME(J1), NAME(J2), KW, KW2, KSTAR(ICM),
+              WRITE (82,*)  NAME(J1), NAME(J2), KW, KW2, KSTAR(ICM),
      &            RI, ECC, PB, SEMI, M1, M2, ZL1, ZL2, R1, R2, TE1, TE2
     5         FORMAT (2I6,2I3,I4,F6.1,F6.3,10F7.3)
               NB = NB + 1
@@ -139,7 +139,7 @@
               ZL1 = LOG10(LUM)
 *       Form LOG(Te) using L = 4*pi*R**2*\sigma*T**4 and solar value 3.7.
               TE = 0.25*(ZL1 - 2.0*R1) + 3.7
-              WRITE (83,10)  NAME(I), KW, RI, M1, ZL1, R1, TE
+              WRITE (83,*)  NAME(I), KW, RI, M1, ZL1, R1, TE
    10         FORMAT (I10,I4,5F10.3)
               NSTAR = NSTAR + 1
           END IF
