@@ -79,7 +79,7 @@ stablz.f start3.f subsys.f tperi.f trans3.f \
 quad.f derqp4.f difsy4.f endreg.f erel4.f ichain.f newreg.f newsys.f \
 qpmod4.f rchain.f rsort.f stabl4.f start4.f status.f trans4.f \
 brake4.f ksrot.f expand2.f deform2.f circ.f spinup.f mtdiag.f \
-snap_to_disk.f #impmm.f
+snap_to_disk.f impmm.f
 else
 #KS block-step version
 SOURCE = \
@@ -115,7 +115,8 @@ subint.f subsys.f  swap.f   sweep.f   synch.f  tail0.f  tcirc.f   \
 tides.f  tides2.f  tides3.f touch.f   tperi.f  tpert.f  trans3.f trans4.f \
 trdot.f  trdot2.f  trflow.f triple.f  tstab.f  tstep.f  units.f  unpert.f \
 update.f verify.f  xtrnl0.f xtrnld.f  xtrnlf.f xtrnlp.f xtrnlt.f xtrnlv.f \
-xvpred.f zare.f    zcnsts.f zero.f    zfuncs.f mtdiag.f snap_to_disk.f
+xvpred.f zare.f    zcnsts.f zero.f    zfuncs.f mtdiag.f snap_to_disk.f \
+impmm.f
 endif
 
 ifeq ($(chainmode), chain)
