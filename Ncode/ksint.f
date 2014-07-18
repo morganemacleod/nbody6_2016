@@ -161,6 +161,8 @@
 *       Delay chain regularization search until near end of block-step.
           IF (TIME + STEP(I1).GT.TBLOCK) THEN
               CALL IMPACT(I)
+              ! MMadd
+              IF(KZ(45) .GE. 3 ) CALL IMPMM(I)
               IF (IPHASE.GT.0) GO TO 100
           END IF
       ELSE IF (ITERM.EQ.2) THEN
@@ -754,6 +756,8 @@
    88 IF (KZ(15).GT.0.AND.STEP(I).LT.DTMIN) THEN
           CALL IMPACT(I)
       END IF
+!     MMadd Morgan adding own impact routine
+      IF(KZ(45) .GE. 3 ) CALL IMPMM(I)
       GO TO 100
 *
 *       Terminate regularization of current pair (IPAIR set in KSPAIR).
