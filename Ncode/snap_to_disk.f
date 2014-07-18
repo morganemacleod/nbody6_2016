@@ -20,12 +20,13 @@ C write to disk
       write(56,1022) time,Ntot,N 
 
  1022 format("time ",F14.4,1X,I12,1X,I12)
- 1023 format(E15.8,1X,E17.10,1X,E17.10,1X,E17.10,
-     &     1X,E17.10,1X,E17.10,1X,E17.10,1X,I7)
+* 1023 format(E15.8,1X,E17.10,1X,E17.10,1X,E17.10,
+*     &     1X,E17.10,1X,E17.10,1X,E17.10,1X,I7)
 
       do L=1,NTOT
-         write(56,1023) body(L),X(1,L),X(2,L),X(3,L),
-     &        XDOT(1,L),XDOT(2,L),XDOT(3,L),name(L)
+         write(56,*) body(L),X(1,L),X(2,L),X(3,L),
+     &        XDOT(1,L),XDOT(2,L),XDOT(3,L),
+     &        name(L),KSTAR(L),RADIUS(L)
       enddo
 
       end
