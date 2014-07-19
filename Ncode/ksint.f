@@ -377,7 +377,8 @@
               DMIN2 = MIN(DMIN2,QPERI)
 *
 *       Check optional tidal interaction or stellar collision.
-              IF (KZ(19).GE.3.AND.KSTAR(I).LT.10) THEN
+*       MMadd: change type to include WDs
+              IF (KZ(19).GE.3.AND.KSTAR(I).LT.13) THEN
                   VINF = SQRT(2.0*HI)*VSTAR
                   KS1 = KSTAR(I1)
                   KS2 = KSTAR(I2)
@@ -455,6 +456,34 @@
                       END IF
                   END IF
               END IF
+*       MMadd: KZ(27) Tidal disruption diagnostics
+              IF (KZ(19).GE.3.AND.KZ(27).EQ.3) THEN
+                 IBHTD = 0
+                 ITD = 0
+                 ! Make sure the more massive body is allocated to BH
+                 IF(BODY(I1).GT.BODY(I2).AND.BODY(I1).EQ.BODY1) THEN
+                    IBHTD = I1
+                    ITD = I2
+                 ELSEIF(BODY(I2).GT.BODY(I1).AND.BODY(I2).EQ.BODY1) THEN
+                    ITD = I1
+                    IBHTD = I2
+                 ENDIF
+                 ! If we're including the BH
+                 IF(IBHTD.GT.0) THEN
+                    VINF = SQRT(2.0*HI)*VSTAR
+                    KSBHTD = KSTAR(IBHTD)
+                    KSTD = KSTAR(ITD)
+                    ! Tidal radius
+                    RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
+                    ! Factor x tidal radius for diagnostics
+                    RTDF = 100.D0*RTD
+                    IF(QPERI.LE.RTD) THEN
+                       WRITE(*,*) "TIDAL DISRUPTION"
+                    ELSEIF(QPERI.LE.RTDF) THEN
+                       WRITE(*,*) "TIDAL ENCOUNTER"
+                    ENDIF
+                 ENDIF ! if including BH
+              ENDIF ! if extra KZ(27) TD ... end MMadd
           END IF
           GO TO 100
       END IF
