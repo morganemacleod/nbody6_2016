@@ -115,7 +115,7 @@
       IF (ECC1.GT.1.0.AND.PMIN.GT.50.0*SEMI) GO TO 100
 *
 *       Print optional diagnostics for strong three-body interactions.
-      IF (KZ(45).GT.3.AND.BODY(I).GT.2.0D-04.AND.PMIN.LT.10.0*SEMI) THEN
+      IF (KZ(45).EQ.4.AND.BODY(I).GT.2.0D-04.AND.PMIN.LT.10.0*SEMI) THEN
           IF (BODY(I1).GT.BODY(I2)) THEN
               NMX = NAME(I2)
           ELSE
