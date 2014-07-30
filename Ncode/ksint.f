@@ -476,7 +476,7 @@
                     ! Tidal radius
                     RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
                     ! Factor x tidal radius for diagnostics
-                    RTDF = 100.D0*RTD
+                    RTDF = 1.D3*RTD
                     ! tidal disruption
                     IF(QPERI.LE.RTD) THEN
                        ! write some diagnostics
@@ -635,7 +635,7 @@
                     ! Tidal radius
                     RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
                     ! Factor x tidal radius for diagnostics
-                    RTDF = 100.D0*RTD
+                    RTDF = 1.D3*RTD
                     ! tidal disruption
                     IF(QPERI.LE.RTD) THEN
                        ! write some diagnostics
