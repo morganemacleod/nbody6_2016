@@ -409,7 +409,8 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
               EB = BODY(I1)*BODY(I2)*H(IP)/BODY(N+IP)
               WRITE (40,*)  TTOT,NAME(I1),NAME(I2),KSTAR(I1),KSTAR(I2),
      &                       BODY(I1),BODY(I2),RADIUS(I1),RADIUS(I2),
-     &                       LIST(1,I1), SQRT(ECC2), SEMI, PB, EB, E(3)
+     &                       LIST(1,I1), SQRT(ECC2), SEMI, PB, EB, E(3),
+     &                       BODY(IPAIR),X(:,IPAIR),XDOT(:,IPAIR)
               CALL FLUSH(40)
           END IF
       END IF

@@ -65,7 +65,10 @@
 *
 *       Include special disruption treatment for BH + star (only #11 < 0).
       IF (MAX(KSTAR(I1),KSTAR(I2)).EQ.14) THEN
-          DM1 = 0.5*BODY(I1)*ZMBAR
+          !DM1 = 0.5*BODY(I1)*ZMBAR
+          !MMadd: make dm = mstar
+          DM1 = BODY(I1)*ZMBAR
+        
 *       Conserve total mass and specific energy (H = const here).
           M1 = M1 - DM1
           M2 = M2 + DM1
@@ -82,6 +85,8 @@
    70     FORMAT (' KSAPO!    IT R TD2 ',I4,1P,2E10.2)
           IF (ITER.LT.50.AND.R(IPAIR).LT.RMIN) GO TO 2
           CALL RESOLV(IPAIR,1)
+          ! MMadd: set COALS = true
+          !COALS = .TRUE.
           COALS = .FALSE.
           SEMI = SEMI0
           ISKIP = 1
@@ -208,8 +213,8 @@
               WHICH1 = 'DISRUPT '
               NDISR = NDISR + 1
 *       Restore mass of accreted star for diagnostics (from 23/5/14).
-              M1 = 2.0*M1
-              WRITE (24,6)  TIME+TOFF, NDISR, NAME(I1), KSTAR(I1),
+              M1 = M1+DM1
+              WRITE (24,*)  TIME+TOFF, NDISR, NAME(I1), KSTAR(I1),
      &                      ECC, MIN(M1,M2), MAX(M1,M2), SEMI
     6         FORMAT (' DISRUPT1    T NDISR NM K* E M1 M2 SEMI ',
      &                              F8.1,I5,I7,I4,F10.6,2F6.1,1P,E10.2)
@@ -220,7 +225,7 @@
      &                  KW1, KW2, M1, M2, DM*ZMBAR, ECC0, ECC, R1, R2,
      &                  RP1, SEMI0*SU, SEMI*SU
    10     FORMAT (A8,'CE    NAM K0* K* M1 M2 DM E0 E R1 R2 RP A0 A ',
-     &                      2I6,4I3,F5.1,F6.1,F5.1,2F10.6,2F7.1,1P3E9.1)
+     &               2I6,4I3,ES15.3,ES15.3,ES15.3,2F10.6,2F7.1,1P3E9.1)
 *
 *       Check common envelope condition again after circularization (09/08).
           IF (ECC0.GT.0.001D0.AND.ECC.LE.0.001D0) THEN
