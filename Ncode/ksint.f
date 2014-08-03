@@ -4,6 +4,7 @@
 *       Regularized integration.
 *       ------------------------
 *
+*
       INCLUDE 'common6.h'
       COMMON/BINARY/  CM(4,MMAX),XREL(3,MMAX),VREL(3,MMAX),
      &                HM(MMAX),UM(4,MMAX),UMDOT(4,MMAX),TMDIS(MMAX),
