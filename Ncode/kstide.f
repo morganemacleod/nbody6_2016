@@ -99,6 +99,9 @@
           SEMI1 = -0.5*BODY(I)/(H(IPAIR) + DH)
           ECC1 = 1.0 - PERI/SEMI1
           ECC1 = MAX(ECC1,ECCM)
+          ! MMadd: print a little info here 
+          WRITE(*,*) "CALLED KSTIDE", NAME(I1),NAME(I2),
+     &         ECC,ECC1,DH/H(IPAIR)
       END IF
 *
 *       Skip possible hyperbolic case.

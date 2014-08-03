@@ -278,7 +278,7 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
       SECS = 3600.0*IHOUR + 60.0*IMIN + ISEC
       WRITE (6,45)  TTOT, Q, DE, BE(3), RMIN, DTMIN, ICR, DELTA1, E(3),
      &              DETOT, IHOUR, IMIN, ISEC
-   45 FORMAT (/,' ADJUST:  TIME =',F8.2,'  Q =',F5.2,'  DE =',1P,E10.2,
+   45 FORMAT (/,' ADJUST:  TIME =',F8.2,'  Q =',F9.4,'  DE =',1P,E10.2,
      &          '  E =',0P,F10.6,'  RMIN =',1P,E8.1,'  DTMIN =',E8.1,
      &          '  TC =',0P,I5,'  DELTA =',1P,E9.1,'  E(3) =',0P,F10.6,
      &          '  DETOT =',F10.6,'  WTIME =',I4,2I3)
@@ -382,6 +382,39 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
               CALL FLUSH(39)
           END IF
       END IF
+! begin MMadd
+*       Include optional diagnostics for the hardest binary below ECLOSE that incl BH.
+      IF (KZ(33).GE.2.AND.IOUT.GT.0) THEN
+          HP = 0.0
+          IP = 0
+          DO 90 IPAIR = 1,NPAIRS
+*       Skip outer (ghost) binary of quadruple system.
+              IF (H(IPAIR).LT.HP.AND.BODY(N+IPAIR).GE.BODY1) THEN
+                  HP = H(IPAIR)
+                  IP = IPAIR
+              END IF
+ 90       CONTINUE
+          IF (IP.GT.0.AND.HP.LT.-ECLOSE) THEN
+              I1 = 2*IP - 1
+              I2 = I1 + 1
+              ! MMadd: a little logic to mass-sort
+              IF (BODY(I2) .GT. BODY(I1) ) THEN
+                 I2 = 2*IP-1
+                 I1 = I2+1
+              ENDIF
+              SEMI = -0.5*BODY(N+IP)/H(IP)
+              PB = SEMI*SQRT(SEMI/BODY(N+IP))
+              ECC2 = (1.0 - R(IP)/SEMI)**2 +
+     &                                  TDOT2(IP)**2/(SEMI*BODY(N+IP))
+              EB = BODY(I1)*BODY(I2)*H(IP)/BODY(N+IP)
+              WRITE (40,*)  TTOT,NAME(I1),NAME(I2),KSTAR(I1),KSTAR(I2),
+     &                       BODY(I1),BODY(I2),RADIUS(I1),RADIUS(I2),
+     &                       LIST(1,I1), SQRT(ECC2), SEMI, PB, EB, E(3),
+     &                       BODY(IPAIR),X(:,IPAIR),XDOT(:,IPAIR)
+              CALL FLUSH(40)
+          END IF
+      END IF
+!END MMadd
 *
 *       Include optional KS reg of binaries outside standard criterion.
       IF (KZ(8).GT.0.AND.N.GE.5000.AND.DMOD(TIME,DTK(10)).EQ.0.0D0) THEN

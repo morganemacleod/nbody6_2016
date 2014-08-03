@@ -61,7 +61,11 @@
       CPU = TCOMP
       NDUMP = NTEMP + 1
 *       Control variable NDUMP used to prevent a third restart.
-      ETACOR = 0.5
+      IF(NDUMP .EQ. 1) THEN
+         ETACOR = 0.3
+      ELSE
+         ETACOR = 2*ETA0/ETAR
+      ENDIF
       ETAI = ETACOR*ETAI
       ETAR = ETACOR*ETAR
       IF (KZ(17).GT.1) ETAU = ETACOR*ETAU

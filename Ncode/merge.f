@@ -35,6 +35,8 @@
     5     FORMAT (/,5X,'WARNING!   MERGER LIMIT EXCEEDED   NMERGE =',I4)
           GO TO 100
       END IF
+!     MMadd: skip merger if KZ(45) == 5
+      IF(BODY(IPAIR).GE.BODY1.AND.KZ(45).EQ.5) GO TO 100
 *
 *       Use double hierarchy procedure if one binary is already a merger.
       IF (NAME(N+KSPAIR).LT.0.OR.NAME(JCOMP).LT.0) THEN
