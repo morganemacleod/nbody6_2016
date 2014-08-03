@@ -1,0 +1,63 @@
+Dear NBODY6 users,
+
+Here are a few updates.
+
+chdata.f:  Simon pointed out a subtle bug in this small routine. It has the
+           effect that the data for a BH may be missing sometimes.
+
+chaos.f:   Mass loss for a circular orbit caused a problem when using option
+           #27 = 2. Eventually this was resolved by an exit whereupon the
+           orbit expanded smoothly. (The mass-loss time-scale was short).
+
+ksreg.f:   Discussions with Longwang about reducing a bottleneck in NBODY6++
+           resulted in new versions of ksreg.f, ksinit.f and ksterm.f.
+           In this routine, the regular force and first derivative for the
+           first KS component are saved for the new c.m. in ksinit.f. in
+           order to avoid the full N force loop in FPOLY1/2. The assumption
+           that the regular force does not depend significantly on velocity
+           has been tested.
+
+ksinit.f:  The choice between full force loops in FPOLY1/2 and new neighbour
+           force is currently set at N < 5000 which can be readily changed
+           if desired. Here the regular time-step is obtained by a criterion
+           based on FR and D1R which is made commensurate. Any non-standard
+           use (IPHASE.NE.1) is also treated in the standard way.
+
+ksterm.f:  For standard termination, one procedure involving a strong
+           perturber is not included in the fast version (N >= 5000) to
+           avoid an extra CALL FPOLY1/2. Now the regular force and first
+           derivative for c.m. are copied to the new components and the
+           irregular contributions are obtained from the c.m. neighbours.
+           Finally the irregular time-steps are based on the close encounter
+           definition in adjust.f using the appropriate quantities and then
+           made commensurate in the usual way. Again any non-standard cases
+           (IPHASE.NE.2) are not speeded up.
+           This new scheme has been in operation on my second GPU system
+           for quite some time and the original implementations are still
+           available.
+
+grbin.f:   Jonsuk has pointed out a missing dimensionless factor ETA in the
+           second-order PN term (dir ARchain). The error should be small
+           except for large mass ratios. This bug is also present in the
+           similar routine in the tar file kozai.tar.gz which has been fixed.
+
+hrdiag.f:  Jarrod has replaced an extra line with another in the section
+           for type 6.
+
+reduce.f:  A simple fix in a complicated situation. After much discussion
+           and diagnostic information Longwang realized that only one call
+           to the re-initialization routine (reinit.f) is needed for an
+           escaping binary. The call is made in the middle of a section
+           which is in fact called twice but the suppression is easy.
+           This routine should be placed in dir Nchain.
+           It turns out that the similar routine in NBODY7 contains the
+           correct implementation which is dated at least 6 months ago.
+
+trdot.f:   Following a recent discussion about the luminosity of WDs I have
+           modified the updating time for all types ge.10 to sqrt(10/lum)
+           instead of 100 Myr. This gives somewhat larger values for NS & BH
+           which is less relevant.
+
+Best wishes,
+Sverre
+           
