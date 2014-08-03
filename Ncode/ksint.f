@@ -399,12 +399,13 @@
                     ! Factor x tidal radius for diagnostics
                     RTDF = 1.D3*RTD
                     ! tidal disruption
-                    WRITE(*,*) "About to check TD (hyper):",TIME,I1,I2
+                    !WRITE(*,*) "About to check TD (hyper):",TIME,I1,I2
                     IF(QPERI.LE.RTD) THEN
                        ! write some diagnostics
-                       WRITE(*,*) "TIDAL DISRUPTION", IBHTD, ITD, QPERI
-                       WRITE(57,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                      ITD,KSTD,BODY(ITD),RADIUS(ITD),
+                       WRITE(*,*) "TIDAL DISRUPTION (hyper)", 
+     &                      NAME(IBHTD), NAME(ITD), QPERI,RTD
+                       WRITE(57,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                      NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                      RTD,QPERI,SQRT(ECC2)
                        CALL FLUSH(57)
                        ! call CMBODY to do the encounter
@@ -414,9 +415,10 @@
                        CALL CMBODY(QPERI,2)
                     ! tidal encounter without disruption
                     ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
-                       WRITE(*,*) "TIDAL ENCOUNTER",IBHTD, ITD, QPERI
-                       WRITE(58,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                      ITD,KSTD,BODY(ITD),RADIUS(ITD),
+                       WRITE(*,*) "TIDAL ENCOUNTER (hyper)",
+     &                      NAME(IBHTD), NAME(ITD), QPERI,RTD
+                       WRITE(58,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                      NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                      RTD,QPERI,SQRT(ECC2)
                        CALL FLUSH(58)
                     ENDIF
@@ -553,7 +555,7 @@
           IF (KZ(19).GE.3.AND.KZ(27).EQ.3) THEN
              IBHTD = 0
              ITD = 0
-! Make sure the more massive body is allocated to BH
+             ! Make sure the more massive body is allocated to BH
              IF(BODY(I1).GT.BODY(I2).AND.BODY(I1).EQ.BODY1) THEN
                 IBHTD = I1
                 ITD = I2
@@ -564,6 +566,8 @@
              ! If we're including the BH
              IF(IBHTD.GT.0) THEN
                 VINF = SQRT(2.0*HI)*VSTAR
+                ECC2 = (1.0 - RI/SEMI)**2 +
+     &               TDOT2(IPAIR)**2/(BODY(I)*SEMI)
                 KSBHTD = KSTAR(IBHTD)
                 KSTD = KSTAR(ITD)
                 ! Tidal radius
@@ -571,12 +575,13 @@
                 ! Factor x tidal radius for diagnostics
                 RTDF = 1.D3*RTD
                 ! tidal disruption
-                WRITE(*,*) "About to check TD (ecc):",TIME,I1,I2
+                !WRITE(*,*) "About to check TD (ecc):",TIME,I1,I2
                 IF(QPERI.LE.RTD) THEN
                    ! write some diagnostics
-                   WRITE(*,*) "TIDAL DISRUPTION", IBHTD, ITD, QPERI
-                   WRITE(57,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                  ITD,KSTD,BODY(ITD),RADIUS(ITD),
+                   WRITE(*,*) "TIDAL DISRUPTION (ecc)", 
+     &                  NAME(IBHTD), NAME(ITD), QPERI
+                   WRITE(57,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                  NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                  RTD,QPERI,SQRT(ECC2) 
                    CALL FLUSH(57)
                    ! call CMBODY to do the encounter
@@ -586,9 +591,10 @@
                    CALL CMBODY(QPERI,2)
                    ! tidal encounter without disruption
                 ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
-                   WRITE(*,*) "TIDAL ENCOUNTER",IBHTD, ITD, QPERI
-                   WRITE(58,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                  ITD,KSTD,BODY(ITD),RADIUS(ITD),
+                   WRITE(*,*) "TIDAL ENCOUNTER (ecc)",
+     &                  NAME(IBHTD), NAME(ITD), QPERI
+                   WRITE(58,*) TIME,NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                  NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                  RTD,QPERI,SQRT(ECC2)
                    CALL FLUSH(58)
                 ENDIF
