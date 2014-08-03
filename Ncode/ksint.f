@@ -479,6 +479,7 @@
                     ! Factor x tidal radius for diagnostics
                     RTDF = 1.D3*RTD
                     ! tidal disruption
+                    WRITE(*,*) "About to check for TD: ",TIME,I1,I2
                     IF(QPERI.LE.RTD) THEN
                        ! write some diagnostics
                        WRITE(*,*) "TIDAL DISRUPTION", IBHTD, ITD, QPERI
