@@ -37,7 +37,7 @@ C____________________________________
 
       ! MMadd
       write(*,*) "ETAR = ", ETAR, "ETAI = ", ETAI, "ETAU = ", ETAU  
-
+      write(*,*) "BODY1 = ",BODY1
 c$$$      write(*,*) "IN WRAPPER", mtNTOT,mtNS,mtNB,mtIFIRST,mtN
 c$$$      write(*,*) "IN WRAPPER", NTOT,IFIRST,N
       call diagnostic()

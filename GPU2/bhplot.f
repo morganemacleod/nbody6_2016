@@ -8,11 +8,13 @@
       COMMON/CHAINC/  XC(3,NCMAX),UC(3,NCMAX),BODYC(NCMAX),ICH,
      &                LISTC(LMAX)
       COMMON/POSTN2/  SEMIGR,ECCGR,DEGR,ISPIN
-      REAL*8  XI(8),XCM(3),VCM(3)
+      REAL*8  XI(3),XCM(3),VCM(3),VXI(3)
+
+!     MMadd: intervening here to keep this simple
 *
 *
 *       Decide between standard BH, KS or ARC.
-      IF (NCH.GT.0.OR.KZ(45).GT.1) GO TO 30
+!      IF (NCH.GT.0.OR.KZ(45).GT.1) GO TO 30
 *
 *       Search for one or two BHs (NAME = 1 or 2 but #24 holds number).
       IBH = 0
@@ -29,44 +31,24 @@
 *       Copy coordinates and velocities (singles or c.m. for simplicity).
       I = IBH
       KK = 0
-*       Switch to second component if IBH not identified.
-      IF (I.EQ.0) THEN
-          I = JBH
-          KK = 0
-      END IF
    10 IF (I.GE.IFIRST) THEN
           DO 12 K = 1,3
               XI(KK+K) = X(K,I)
+              VXI(K) = XDOT(K,I)
    12     CONTINUE
       ELSE IF (I.GT.0) THEN
           IPAIR = KVEC(I)
           DO 15 K = 1,3
               XI(KK+K) = X(K,N+IPAIR)
+              VXI(K) = XDOT(K,N+IPAIR)
    15     CONTINUE
       END IF
-*       Include central distance as 4th entry.
-      XI(KK+4) = SQRT(XI(KK+1)**2 + XI(KK+2)**2 + XI(KK+3)**2)
-*       Use c.m. if both BHs in the same pair.
-      IF (IPAIR.GT.0) THEN
-          IF (NAME(2*IPAIR-1) + NAME(2*IPAIR).EQ.3) GO TO 20
-      END IF
-*
-*       Repeat for possible second BH.
-      IF (I.EQ.IBH.AND.JBH.GT.0) THEN
-          I = JBH
-          KK = KK + 4
-          GO TO 10
-      END IF
-*
 *       Produce plotting output in Myr on unit 45 (to match option #45).
-   20 IF (IBH.GT.0.OR.JBH.GT.0) THEN
-          K1 = 0
-          K2 = KK
-          WRITE (45,25)  (TIME+TOFF)*TSTAR, (XI(K),K=K1+1,K2+4)
-   25     FORMAT (' ',F10.4,8F9.4)
-          CALL FLUSH(45)
-      END IF
+      WRITE(45,*) TIME,BODY(I),XI,VXI
+      CALL FLUSH(45)
+      ! MMadd: skip the rest!!
       GO TO 200
+
 *
 *       Treat case of BH in KS binary (#45 > 1).
    30 IF (NCH.GT.0.OR.KZ(45).LE.1) GO TO 70
