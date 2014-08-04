@@ -19,6 +19,7 @@
       REAL*8  UI(4),UIDOT(4),XI(6),VI(6),FP(6),FD(6)
       LOGICAL IQ
       SAVE ITERM
+      REAL*8  DE,DH,TINSP
 *
 *
 *       Set second component, pair index & c.m. index.
@@ -58,7 +59,7 @@
                       END IF
                   END IF
 *       Check any inner and outer circularizing binary using NAMEM & NAMEG.
-                  DO 3 K = 1,NCHAOS
+                  DO 3K = 1,NCHAOS
                       IF (NAMEC(K).EQ.NZERO - NAMEM(IM)) THEN
 *       Update unperturbed binary if T - TOSC > 10 Myr (cf. IMPACT & DECIDE).
                           IF ((TIME - TOSC(K))*TSTAR.GT.10.0) THEN
@@ -598,6 +599,25 @@
      &                  RTD,QPERI,SQRT(ECC2)
                    CALL FLUSH(58)
                 ENDIF
+                ! check the inspiral case if compact objects
+                IF(KSTD.GE.10) THEN
+                   CALL TIDES3(QPERI,BODY(I1),BODY(I2),
+     &                  VSTAR,H(IPAIR),SQRT(ECC2),DE)
+                   ! DH = DE/MU
+                   DH = DE*(BODY(I1)+BODY(I2))/(BODY(I1)*BODY(I2))
+                   TINSP = ABS(H(IPAIR)/DH)*SQRT(SEMI**3/BODY(IPAIR))
+                   WRITE(*,*), "COMPACT BIN, Tinsp = ",
+     &                  NAME(I1),NAME(I2),SEMI,TINSP
+                   IF(TINSP.LT.1.D7) THEN
+                      ! call CMBODY to do the encounter                                                                                                                                   
+                      WRITE(*,*) "COMPACT INSPIRAL!!!",TIME,TINSP/1.D7
+                      CALL KSPERI(IPAIR)
+                      KSPAIR = IPAIR
+                      IQCOLL = -2
+                      CALL CMBODY(QPERI,2)
+                      
+                   ENDIF !inspiral
+                ENDIF! check inspiral
              ENDIF              ! if including BH
           ENDIF                 ! if extra KZ(27) TD ... end MMadd
 *
