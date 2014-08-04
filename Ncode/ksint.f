@@ -608,7 +608,7 @@
                    TINSP = ABS(H(IPAIR)/DH)*SQRT(SEMI**3/BODY(IPAIR))
 !                   WRITE(*,*), "COMPACT BIN, Tinsp = ",
 !     &                  NAME(I1),NAME(I2),SEMI,TINSP
-                   IF(TINSP.LT.1.D7) THEN
+                   IF(TINSP.LT.1.D0) THEN
                       ! call CMBODY to do the encounter                                                                                                                                   
                       WRITE(*,*) "COMPACT INSPIRAL:",TIME,
      &                     NAME(IBHTD),KSBHTD,BODY(IBHTD),
