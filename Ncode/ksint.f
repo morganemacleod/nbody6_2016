@@ -1,6 +1,7 @@
       SUBROUTINE KSINT(I1)
 *
 *
+*
 *       Regularized integration.
 *       ------------------------
 *
@@ -18,6 +19,7 @@
       REAL*8  UI(4),UIDOT(4),XI(6),VI(6),FP(6),FD(6)
       LOGICAL IQ
       SAVE ITERM
+      REAL*8  DE,DH,TINSP
 *
 *
 *       Set second component, pair index & c.m. index.
@@ -57,7 +59,7 @@
                       END IF
                   END IF
 *       Check any inner and outer circularizing binary using NAMEM & NAMEG.
-                  DO 3 K = 1,NCHAOS
+                  DO 3K = 1,NCHAOS
                       IF (NAMEC(K).EQ.NZERO - NAMEM(IM)) THEN
 *       Update unperturbed binary if T - TOSC > 10 Myr (cf. IMPACT & DECIDE).
                           IF ((TIME - TOSC(K))*TSTAR.GT.10.0) THEN
@@ -376,10 +378,56 @@
               ECC2 = (1.0 - RI/SEMI)**2 + TDOT2(IPAIR)**2/(BODY(I)*SEMI)
               QPERI = SEMI*(1.0D0 - SQRT(ECC2))
               DMIN2 = MIN(DMIN2,QPERI)
-*
+*       MMadd: KZ(27) Tidal disruption diagnostics
+              IF (KZ(19).GE.3.AND.KZ(27).EQ.3) THEN
+                 IBHTD = 0
+                 ITD = 0
+                 ! Make sure the more massive body is allocated to BH
+                 IF(BODY(I1).GT.BODY(I2).AND.BODY(I1).EQ.BODY1) THEN
+                    IBHTD = I1
+                    ITD = I2
+                 ELSEIF(BODY(I2).GT.BODY(I1).AND.BODY(I2).EQ.BODY1) THEN
+                    ITD = I1
+                    IBHTD = I2
+                 ENDIF
+                 ! If we're including the BH
+                 IF(IBHTD.GT.0) THEN
+                    VINF = SQRT(2.0*HI)*VSTAR
+                    KSBHTD = KSTAR(IBHTD)
+                    KSTD = KSTAR(ITD)
+                    ! Tidal radius
+                    RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
+                    ! Factor x tidal radius for diagnostics
+                    RTDF = 1.D3*RTD
+                    ! tidal disruption
+                    !WRITE(*,*) "About to check TD (hyper):",TIME,I1,I2
+                    IF(QPERI.LE.RTD) THEN
+                       ! write some diagnostics
+!                       WRITE(*,*) "TIDAL DISRUPTION (hyper)", 
+!     &                      NAME(IBHTD), NAME(ITD), QPERI,RTD
+                       WRITE(57,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                      NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
+     &                      RTD,QPERI,SQRT(ECC2)
+                       CALL FLUSH(57)
+                       ! call CMBODY to do the encounter
+                       CALL KSPERI(IPAIR)
+                       KSPAIR = IPAIR
+                       IQCOLL = -2
+                       CALL CMBODY(QPERI,2)
+                    ! tidal encounter without disruption
+                    ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
+!                       WRITE(*,*) "TIDAL ENCOUNTER (hyper)",
+!     &                      NAME(IBHTD), NAME(ITD), QPERI,RTD
+                       WRITE(58,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                      NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
+     &                      RTD,QPERI,SQRT(ECC2)
+                       CALL FLUSH(58)
+                    ENDIF
+                 ENDIF ! if including BH
+              ENDIF ! if extra KZ(27) TD ... end MMadd
 *       Check optional tidal interaction or stellar collision.
 *       MMadd: change type to include WDs
-              IF (KZ(19).GE.3.AND.KSTAR(I).LT.14) THEN
+              IF (KZ(19).GE.3.AND.KSTAR(I).LE.14) THEN
                   VINF = SQRT(2.0*HI)*VSTAR
                   KS1 = KSTAR(I1)
                   KS2 = KSTAR(I2)
@@ -457,50 +505,6 @@
                       END IF
                   END IF
               END IF
-*       MMadd: KZ(27) Tidal disruption diagnostics
-              IF (KZ(19).GE.3.AND.KZ(27).EQ.3) THEN
-                 IBHTD = 0
-                 ITD = 0
-                 ! Make sure the more massive body is allocated to BH
-                 IF(BODY(I1).GT.BODY(I2).AND.BODY(I1).EQ.BODY1) THEN
-                    IBHTD = I1
-                    ITD = I2
-                 ELSEIF(BODY(I2).GT.BODY(I1).AND.BODY(I2).EQ.BODY1) THEN
-                    ITD = I1
-                    IBHTD = I2
-                 ENDIF
-                 ! If we're including the BH
-                 IF(IBHTD.GT.0) THEN
-                    VINF = SQRT(2.0*HI)*VSTAR
-                    KSBHTD = KSTAR(IBHTD)
-                    KSTD = KSTAR(ITD)
-                    ! Tidal radius
-                    RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
-                    ! Factor x tidal radius for diagnostics
-                    RTDF = 1.D3*RTD
-                    ! tidal disruption
-                    IF(QPERI.LE.RTD) THEN
-                       ! write some diagnostics
-                       WRITE(*,*) "TIDAL DISRUPTION", IBHTD, ITD, QPERI
-                       WRITE(57,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                      ITD,KSTD,BODY(ITD),RADIUS(ITD),
-     &                      RTD,QPERI,SQRT(ECC2)
-                       CALL FLUSH(57)
-                       ! call CMBODY to do the encounter
-                       CALL KSPERI(IPAIR)
-                       KSPAIR = IPAIR
-                       IQCOLL = -2
-                       CALL CMBODY(QPERI,2)
-                    ! tidal encounter without disruption
-                    ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
-                       WRITE(*,*) "TIDAL ENCOUNTER",IBHTD, ITD, QPERI
-                       WRITE(58,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                      ITD,KSTD,BODY(ITD),RADIUS(ITD),
-     &                      RTD,QPERI,SQRT(ECC2)
-                       CALL FLUSH(58)
-                    ENDIF
-                 ENDIF ! if including BH
-              ENDIF ! if extra KZ(27) TD ... end MMadd
           END IF
           GO TO 100
       END IF
@@ -548,6 +552,77 @@
               QPERI = RI
           END IF
           DMIN2 = MIN(DMIN2,QPERI)
+*     MMadd: KZ(27) Tidal disruption diagnostics
+          IF (KZ(19).GE.3.AND.KZ(27).EQ.3) THEN
+             IBHTD = 0
+             ITD = 0
+             ! Make sure the more massive body is allocated to BH
+             IF(BODY(I1).GT.BODY(I2).AND.BODY(I1).EQ.BODY1) THEN
+                IBHTD = I1
+                ITD = I2
+             ELSEIF(BODY(I2).GT.BODY(I1).AND.BODY(I2).EQ.BODY1) THEN
+                ITD = I1
+                IBHTD = I2
+             ENDIF
+             ! If we're including the BH
+             IF(IBHTD.GT.0) THEN
+                VINF = SQRT(2.0*HI)*VSTAR
+                ECC2 = (1.0 - RI/SEMI)**2 +
+     &               TDOT2(IPAIR)**2/(BODY(I)*SEMI)
+                KSBHTD = KSTAR(IBHTD)
+                KSTD = KSTAR(ITD)
+                ! Tidal radius
+                RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
+                ! Factor x tidal radius for diagnostics
+                RTDF = 1.D3*RTD
+                ! tidal disruption
+                !WRITE(*,*) "About to check TD (ecc):",TIME,I1,I2
+                IF(QPERI.LE.RTD) THEN
+                   ! write some diagnostics
+ !                  WRITE(*,*) "TIDAL DISRUPTION (ecc)", 
+ !    &                  NAME(IBHTD), NAME(ITD), QPERI
+                   WRITE(57,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                  NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
+     &                  RTD,QPERI,SQRT(ECC2) 
+                   CALL FLUSH(57)
+                   ! call CMBODY to do the encounter
+                   CALL KSPERI(IPAIR)
+                   KSPAIR = IPAIR
+                   IQCOLL = -2
+                   CALL CMBODY(QPERI,2)
+                   ! tidal encounter without disruption
+                ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
+!                   WRITE(*,*) "TIDAL ENCOUNTER (ecc)",
+!     &                  NAME(IBHTD), NAME(ITD), QPERI
+                   WRITE(58,*) TIME,NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                  NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
+     &                  RTD,QPERI,SQRT(ECC2)
+                   CALL FLUSH(58)
+                ENDIF
+                ! check the inspiral case if compact objects
+                IF(KSTD.GE.10) THEN
+                   CALL TIDES3(QPERI,BODY(I1),BODY(I2),
+     &                  VSTAR,H(IPAIR),SQRT(ECC2),DE)
+                   ! DH = DE/MU
+                   DH = DE*(BODY(I1)+BODY(I2))/(BODY(I1)*BODY(I2))
+                   TINSP = ABS(H(IPAIR)/DH)*SQRT(SEMI**3/BODY(IPAIR))
+!                   WRITE(*,*), "COMPACT BIN, Tinsp = ",
+!     &                  NAME(I1),NAME(I2),SEMI,TINSP
+                   IF(TINSP.LT.1.D0) THEN
+                      ! call CMBODY to do the encounter                                                                                                                                   
+                      WRITE(*,*) "COMPACT INSPIRAL:",TIME,
+     &                     NAME(IBHTD),KSBHTD,BODY(IBHTD),
+     &                     NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
+     &                     QPERI,SEMI, SQRT(ECC2)
+                      CALL KSPERI(IPAIR)
+                      KSPAIR = IPAIR
+                      IQCOLL = -2
+                      CALL CMBODY(QPERI,2)
+                      
+                   ENDIF !inspiral
+                ENDIF! check inspiral
+             ENDIF              ! if including BH
+          ENDIF                 ! if extra KZ(27) TD ... end MMadd
 *
 *       Check optional tidal interaction or stellar collision (skip merger).
           IF (KZ(19).GE.3.AND.KSTAR(I).LE.14.AND.NAME(I).GT.0) THEN
@@ -570,10 +645,11 @@
                   END IF
                   IF (QPERI.LT.RCOLL) THEN
 *       Obtain KS variables at pericentre before merging into one body.
-                      CALL KSPERI(IPAIR)
-                      KSPAIR = IPAIR
-                      IQCOLL = -2
-                      CALL CMBODY(QPERI,2)
+                     WRITE(*,*) "QPERI<RCOLL (ecc)", QPERI, RCOLL
+                     CALL KSPERI(IPAIR)
+                     KSPAIR = IPAIR
+                     IQCOLL = -2
+                     CALL CMBODY(QPERI,2)
                   ELSE IF (KSTAR(I).GE.0) THEN
 *       Distinguish between sequential, standard and GR circularization.
                       IF (KZ(27).EQ.1) THEN
@@ -589,11 +665,12 @@
                           ICIRC = 1
                           TC = 0.0
                       END IF
-                      IF (KSTAR(I).GE.10) ICIRC = 0
+!MMcommenting this                      IF (KSTAR(I).GE.10) ICIRC = 0
 *       Skip tidal effects for circularization time above 100 Myr (07/08).
                       IF (ICIRC.GT.0.AND.KZ(27).GT.0.AND.
      &                    TC.LT.100.0) THEN
-                          CALL KSTIDE(IPAIR,QPERI)
+                         WRITE(*,*) "QPERI>RCOLL (ecc)", QPERI, RCOLL
+                         CALL KSTIDE(IPAIR,QPERI)
                       END IF
                   END IF
               END IF
@@ -616,50 +693,6 @@
                       CALL TOUCH(IPAIR,I1,I2,RCOLL)
                   END IF
               END IF
-*       MMadd: KZ(27) Tidal disruption diagnostics
-              IF (KZ(19).GE.3.AND.KZ(27).EQ.3) THEN
-                 IBHTD = 0
-                 ITD = 0
-                 ! Make sure the more massive body is allocated to BH
-                 IF(BODY(I1).GT.BODY(I2).AND.BODY(I1).EQ.BODY1) THEN
-                    IBHTD = I1
-                    ITD = I2
-                 ELSEIF(BODY(I2).GT.BODY(I1).AND.BODY(I2).EQ.BODY1) THEN
-                    ITD = I1
-                    IBHTD = I2
-                 ENDIF
-                 ! If we're including the BH
-                 IF(IBHTD.GT.0) THEN
-                    VINF = SQRT(2.0*HI)*VSTAR
-                    KSBHTD = KSTAR(IBHTD)
-                    KSTD = KSTAR(ITD)
-                    ! Tidal radius
-                    RTD = (BODY(IBHTD)/BODY(ITD))**0.3333 * RADIUS(ITD)
-                    ! Factor x tidal radius for diagnostics
-                    RTDF = 1.D3*RTD
-                    ! tidal disruption
-                    IF(QPERI.LE.RTD) THEN
-                       ! write some diagnostics
-                       WRITE(*,*) "TIDAL DISRUPTION", IBHTD, ITD, QPERI
-                       WRITE(57,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                      ITD,KSTD,BODY(ITD),RADIUS(ITD),
-     &                      RTD,QPERI,SQRT(ECC2) 
-                       CALL FLUSH(57)
-                       ! call CMBODY to do the encounter
-                       CALL KSPERI(IPAIR)
-                       KSPAIR = IPAIR
-                       IQCOLL = -2
-                       CALL CMBODY(QPERI,2)
-                    ! tidal encounter without disruption
-                    ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
-                       WRITE(*,*) "TIDAL ENCOUNTER",IBHTD, ITD, QPERI
-                       WRITE(58,*) TIME, IBHTD,KSBHTD,BODY(IBHTD),
-     &                      ITD,KSTD,BODY(ITD),RADIUS(ITD),
-     &                      RTD,QPERI,SQRT(ECC2)
-                       CALL FLUSH(58)
-                    ENDIF
-                 ENDIF ! if including BH
-              ENDIF ! if extra KZ(27) TD ... end MMadd
           END IF
           GO TO 100
       END IF
