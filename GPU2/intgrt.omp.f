@@ -238,7 +238,7 @@
 *     CALL FLUSH(6)
 *
 *       Terminate on small irregular time-step (means problems).
-      IF (STEP(I).LT.1.0D-11) THEN
+      IF (STEP(I).LT.1.0D-12) THEN
           WRITE (6,24)  I, NAME(I), NXTLEN, NSTEPR, STEP(I), STEPR(I)
    24     FORMAT (' SMALL STEP!!    I NAME LEN #R SI SR ',
      &                              3I6,I11,1P,2E10.2)
