@@ -405,7 +405,7 @@
                        ! write some diagnostics
 !                       WRITE(*,*) "TIDAL DISRUPTION (hyper)", 
 !     &                      NAME(IBHTD), NAME(ITD), QPERI,RTD
-                       WRITE(57,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+                       WRITE(57,*) TTOT, NAME(IBHTD),KSBHTD,BODY(IBHTD),
      &                      NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                      RTD,QPERI,SQRT(ECC2)
                        CALL FLUSH(57)
@@ -418,7 +418,7 @@
                     ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
 !                       WRITE(*,*) "TIDAL ENCOUNTER (hyper)",
 !     &                      NAME(IBHTD), NAME(ITD), QPERI,RTD
-                       WRITE(58,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+                       WRITE(58,*) TTOT, NAME(IBHTD),KSBHTD,BODY(IBHTD),
      &                      NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                      RTD,QPERI,SQRT(ECC2)
                        CALL FLUSH(58)
@@ -581,7 +581,7 @@
                    ! write some diagnostics
  !                  WRITE(*,*) "TIDAL DISRUPTION (ecc)", 
  !    &                  NAME(IBHTD), NAME(ITD), QPERI
-                   WRITE(57,*) TIME, NAME(IBHTD),KSBHTD,BODY(IBHTD),
+                   WRITE(57,*) TTOT, NAME(IBHTD),KSBHTD,BODY(IBHTD),
      &                  NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                  RTD,QPERI,SQRT(ECC2) 
                    CALL FLUSH(57)
@@ -594,7 +594,7 @@
                 ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
 !                   WRITE(*,*) "TIDAL ENCOUNTER (ecc)",
 !     &                  NAME(IBHTD), NAME(ITD), QPERI
-                   WRITE(58,*) TIME,NAME(IBHTD),KSBHTD,BODY(IBHTD),
+                   WRITE(58,*) TTOT,NAME(IBHTD),KSBHTD,BODY(IBHTD),
      &                  NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                  RTD,QPERI,SQRT(ECC2)
                    CALL FLUSH(58)
@@ -610,7 +610,7 @@
 !     &                  NAME(I1),NAME(I2),SEMI,TINSP
                    IF(TINSP.LT.1.D0) THEN
                       ! call CMBODY to do the encounter                                                                                                                                   
-                      WRITE(*,*) "COMPACT INSPIRAL:",TIME,
+                      WRITE(*,*) "COMPACT INSPIRAL:",TTOT,
      &                     NAME(IBHTD),KSBHTD,BODY(IBHTD),
      &                     NAME(ITD),KSTD,BODY(ITD),RADIUS(ITD),
      &                     QPERI,SEMI, SQRT(ECC2)
@@ -669,7 +669,7 @@
 *       Skip tidal effects for circularization time above 100 Myr (07/08).
                       IF (ICIRC.GT.0.AND.KZ(27).GT.0.AND.
      &                    TC.LT.100.0) THEN
-                         WRITE(*,*) "QPERI>RCOLL (ecc)", QPERI, RCOLL
+                         !WRITE(*,*) "QPERI>RCOLL (ecc)", QPERI, RCOLL
                          CALL KSTIDE(IPAIR,QPERI)
                       END IF
                   END IF
