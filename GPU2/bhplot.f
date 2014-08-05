@@ -44,7 +44,7 @@
    15     CONTINUE
       END IF
 *       Produce plotting output in Myr on unit 45 (to match option #45).
-      WRITE(45,*) TIME,BODY(I),XI,VXI
+      WRITE(45,*) TIME+TOFF,BODY(I),XI,VXI
       CALL FLUSH(45)
       ! MMadd: skip the rest!!
       GO TO 200
