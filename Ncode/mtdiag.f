@@ -28,7 +28,7 @@ C____________________________________
       mtIFIRST=Ifirst
       mtN=N
       mtNZERO = NZERO
-      mttime=TIME
+      mttime=TIME+TOFF
       mtdr(1)=densrad(1)
       mtdr(2)=densrad(2)
       mtdr(3)=densrad(3)
