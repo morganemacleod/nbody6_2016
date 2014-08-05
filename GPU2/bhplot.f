@@ -1,4 +1,5 @@
       SUBROUTINE BHPLOT
+
 *
 *
 *       Black hole plotting data (also NCH & KS).
