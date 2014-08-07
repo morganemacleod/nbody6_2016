@@ -17,7 +17,7 @@ LIBCUDA = -L /pfs/sw/cuda-5.5/lib64 -lcudart
 
 LD_GPU = gfortran -lstdc++ -fopenmp $(LIBCUDA)
 LD_GPU += -fPIC
-LD_GPU += -B /usr/share/libhugetlbfs -Wl,--hugetlbfs-align
+#LD_GPU += -B /usr/share/libhugetlbfs -Wl,--hugetlbfs-align
 # MM
 #LD_GPU += -B /usr/share/libhugetlbfs -Wl,--hugetlbfs-link=B
 

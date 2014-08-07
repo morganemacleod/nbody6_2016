@@ -264,6 +264,7 @@
               ILIST(L) = LIST(L,I1)
    11     CONTINUE
 *
+          write(*,*) "testing for massless ghost"
 *       Ensure rare case of massless remnant will escape at next output.
           IF (KW1.EQ.15.OR.KW2.EQ.15) THEN
             CALL KSTERM
@@ -356,7 +357,8 @@
       IF (BODY(I1).GT.0.5*BODY(N+IPAIR)) STOP
               CALL KSTERM
               CALL KICK(I,1,KW1,DM)
-*       Initialize new KS polynomials after velocity kick (H > 0 is OK).
+              write(*,*) "asigning kick to single object"
+*     Initialize new KS polynomials after velocity kick (H > 0 is OK).
               ICOMP = IFIRST
               JCOMP = IFIRST + 1
               CALL KSREG
