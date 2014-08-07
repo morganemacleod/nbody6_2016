@@ -38,7 +38,7 @@ FFLAGS   += -mavx
 CXXFLAGS += -mavx
 endif
 
-# MM for hyades
+# MM for stampede
 CUDA_PATH = /pfs/sw/cuda-5.5
 #SDK_PATH  = /usr/local/cuda_sdk
 SDK_PATH  = /pfs/sw/cuda-5.5/samples

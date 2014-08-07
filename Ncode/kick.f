@@ -44,7 +44,7 @@
           IF ((KW.LT.13.AND.KZ(25).EQ.0).OR.
      &        (KW.EQ.12.AND.KZ(25).NE.2)) GO TO 30
           ! MMadd: Skip in case of TDE 
-          IF(MAX(BODY(I1),BODY(I2)).EQ.BODY1) GO TO 30
+          ! IF(MAX(BODY(I1),BODY(I2)).EQ.BODY1) GO TO 30
 *       Sum whole binding energy (used by BINOUT for net change).
           EKICK = EKICK + EB
           EGRAV = EGRAV + EB
