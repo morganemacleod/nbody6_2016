@@ -17,7 +17,7 @@ C set Nbinaries
 
 C_____________________________________
 C write to disk
-      write(56,1022) time,Ntot,N 
+      write(56,1022) ttot,Ntot,N 
 
  1022 format("time ",F14.4,1X,I12,1X,I12)
 * 1023 format(E15.8,1X,E17.10,1X,E17.10,1X,E17.10,
@@ -45,12 +45,12 @@ C___________________________ table for saving snapshot
 
       integer iii
 
-      if((time.gt.table(ltable)).and.ltable.lt.ltablemax) then
+      if((ttot.gt.table(ltable)).and.ltable.lt.ltablemax) then
  
          !loop to avoid multiple writings associated with restart
          do iii=0,10000
             ltable = ltable+1
-            if((time.lt.table(ltable)).or.(ltable.ge.ltablemax)) then
+            if((ttot.lt.table(ltable)).or.(ltable.ge.ltablemax)) then
                goto 543
             else
             endif
