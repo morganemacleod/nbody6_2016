@@ -608,10 +608,10 @@
                    TINSP = ABS(H(IPAIR)/DH)*SQRT(SEMI**3/BODY(IPAIR))
 !                   WRITE(*,*), "COMPACT BIN, Tinsp = ",
 !     &                  NAME(I1),NAME(I2),SEMI,TINSP
-                   IF(QPERI.LT.1.d-5.AND.(TT0T-IDINT(TTOT)).LT.0.01)THEN
-                      WRITE (*,*) "COMPACT BINARY",TTOT,NAME(IBHTD),
-     &                             NAME(ITD),TINSP
-                   ENDIF
+!                   IF(QPERI.LT.1.d-5.AND.(TT0T-IDINT(TTOT)).LT.0.01)THEN
+!                      WRITE (*,*) "COMPACT BINARY",TTOT,NAME(IBHTD),
+!     &                             NAME(ITD),TINSP
+!                   ENDIF
                    IF(TINSP.LT.1.D0) THEN
                       ! call CMBODY to do the encounter                                                                                                                                   
                       WRITE(*,*) "COMPACT INSPIRAL:",TTOT,

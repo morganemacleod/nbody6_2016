@@ -30,6 +30,15 @@
           I1 = I2
           I2 = II
       END IF
+      !MMadd, if they're both BHs, still want I2 to be more massive
+      IF(KSTAR(I1).EQ.14.AND.KSTAR(I2).EQ.14) THEN
+         IF(BODY(I1).GT.BODY(I2))THEN
+            II=I1
+            I1=I2
+            I2=II
+         ENDIF
+      ENDIF
+
 *
 *       Update the stars to latest previous time.
       TEV1 = MAX(TEV0(I1),TEV0(I2))
@@ -88,9 +97,11 @@
           ! MMadd: set COALS = true
           !COALS = .TRUE.
           COALS = .FALSE.
+          !IF(KSTAR(I2).EQ.14.AND.KSTAR(I1).GE.13) COALS = .TRUE.
           SEMI = SEMI0
           ISKIP = 1
-*       Skip common envelope part for BH + star interaction.
+          KW1 = 15 ! send disrupted object as massless ghost
+*       Skip common envelope part for BH + star interaction
           GO TO 4
       END IF
 *

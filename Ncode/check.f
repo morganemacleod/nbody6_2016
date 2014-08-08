@@ -83,7 +83,8 @@
 *
       IF (DE.GT.QE) THEN
 *       Continue calculation but reduce the time-step parameters.
-          ETACOR = SQRT(QE/DE)
+          !ETACOR = SQRT(QE/DE)
+          ETACOR = 1.d0
           ETAI = ETACOR*ETAI
           ETAR = ETACOR*ETAR
           IF (KZ(17).GT.1) ETAU = ETACOR*ETAU
