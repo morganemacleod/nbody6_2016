@@ -95,12 +95,12 @@
           IF (ITER.LT.50.AND.R(IPAIR).LT.RMIN) GO TO 2
           CALL RESOLV(IPAIR,1)
           ! MMadd: set COALS = true
-          !COALS = .TRUE.
-          COALS = .FALSE.
+          COALS = .TRUE.
+          !COALS = .FALSE.
           !IF(KSTAR(I2).EQ.14.AND.KSTAR(I1).GE.13) COALS = .TRUE.
           SEMI = SEMI0
           ISKIP = 1
-          KW1 = 15 ! send disrupted object as massless ghost
+          !KW1 = 15 ! send disrupted object as massless ghost
 *       Skip common envelope part for BH + star interaction
           GO TO 4
       END IF
