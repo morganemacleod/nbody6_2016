@@ -376,9 +376,9 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
      &                                  TDOT2(IP)**2/(SEMI*BODY(N+IP))
               EB = BODY(I1)*BODY(I2)*H(IP)/BODY(N+IP)
               WRITE (39,62)  TTOT, NAME(I1), NAME(I2), KSTAR(N+IP),
-     &                       LIST(1,I1), SQRT(ECC2), SEMI, PB, EB, E(3)
-   62         FORMAT (' BINARY:   T NAME K* NP E A P EB E3 ',
-     &                            F8.1,2I6,2I4,F7.3,1P,2E10.2,0P,2F9.4)
+     &                       LIST(1,I1),SQRT(ECC2),SEMI,PB,EB,E(3),TINSP
+   62         FORMAT (' BINARY:   T NAME K* NP E A P EB E3 TINSP',
+     &                    F8.1,2I6,2I4,F7.3,1P,2E10.2,0P,2F9.4,ES20.5)
               CALL FLUSH(39)
           END IF
       END IF
@@ -445,8 +445,12 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
       TDUMP = TIME
 *      IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,2)
 c     MTadd alternating idump
-      IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,idump)
-      idump=5-idump
+      !IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,idump)
+      !idump=5-idump
+!     MMadd sequential dump
+      IF(MOD(INT(TTOT),10).EQ.0) THEN
+         IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,INT(TTOT+1000000))
+      ENDIF
 *       Check COMMON save on fort.1 at main output (#1 = 2).
       IF (KZ(1).EQ.2.AND.NSUB.EQ.0) THEN
           IF (IOUT.GT.0) CALL MYDUMP(1,1)

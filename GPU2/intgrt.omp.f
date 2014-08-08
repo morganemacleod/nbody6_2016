@@ -242,6 +242,7 @@
           WRITE (6,24)  I, NAME(I), NXTLEN, NSTEPR, STEP(I), STEPR(I)
    24     FORMAT (' SMALL STEP!!    I NAME LEN #R SI SR ',
      &                              3I6,I11,1P,2E10.2)
+          !STEP(I) = 1.D-12 ! increase the step
           STOP
       END IF
 *
