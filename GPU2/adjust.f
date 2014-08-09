@@ -445,8 +445,10 @@ c          RMIN = 4.0*RSCALE/(FLOAT(N)*RHOD**0.3333) !MTadd original
       TDUMP = TIME
 *      IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,2)
 c     MTadd alternating idump
-      !IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,idump)
-      !idump=5-idump
+      IF(MOD(INT(TTOT),INT(2*DTADJ)).EQ.0) THEN
+         IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,idump)
+         idump=5-idump
+      ENDIF
 !     MMadd sequential dump
       IF(MOD(INT(TTOT),10).EQ.0) THEN
          IF (KZ(2).GE.1.AND.NSUB.EQ.0) CALL MYDUMP(1,INT(TTOT+1000000))
