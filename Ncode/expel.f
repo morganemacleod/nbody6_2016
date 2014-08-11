@@ -24,18 +24,28 @@
           I2 = J1
       ENDIF
 *
-*       Switch to #I2 if #I1 is a BH (standard case not affected).
-      IF (KSTAR(I1).EQ.14) THEN
-          II = I1
-          I1 = I2
-          I2 = II
-      END IF
-      !MMadd, if they're both BHs, still want I2 to be more massive
-      IF(KSTAR(I1).EQ.14.AND.KSTAR(I2).EQ.14) THEN
-         IF(BODY(I1).GT.BODY(I2))THEN
-            II=I1
-            I1=I2
-            I2=II
+! MM switching these to make I1 the BH... 
+*       Switch to #I1 if #I2 is a BH (standard case not affected).
+      !IF (KSTAR(I1).EQ.14) THEN
+      !    II = I1
+      !    I1 = I2
+      !    I2 = II
+      !END IF
+      !!MMadd, if they're both BHs, still want I2 to be more massive
+      !IF(KSTAR(I1).EQ.14.AND.KSTAR(I2).EQ.14) THEN
+      !   IF(BODY(I1).GT.BODY(I2))THEN
+      !      II=I1
+      !      I1=I2
+      !      I2=II
+      !   ENDIF
+      !ENDIF
+
+      ! MM make I1 the more massive if >= 1 of them are BHs
+      IF(MAX(KSTAR(I1),KSTAR(I2)).EQ.14) THEN
+         IF(BODY(I2).GT. BODY(I1))THEN
+            II = I1
+            I1 = I2
+            I2 = I1
          ENDIF
       ENDIF
 
@@ -300,7 +310,7 @@
    13       FORMAT (' MASSLESS GHOST    NAM K* M ',I6,I4,1P,E10.2)
 *
 *       Include special treatment for velocity kick of KS binary.
-          ELSE IF (KW1.GE.10.OR.ISKIP.GT.0) THEN
+         ELSE IF (KW1.GE.10.OR.ISKIP.GT.0) THEN
 *
               IF (ECC.LE.0.001D0) KSTAR(N+IPAIR) = 10
 *       Re-initialize the KS solution with new perturber list.
@@ -365,7 +375,7 @@
               END IF
 *       Terminate KS binary and assign kick velocity to single star #I.
               I = I1 + 2*(NPAIRS - IPAIR)
-      IF (BODY(I1).GT.0.5*BODY(N+IPAIR)) STOP
+              IF (BODY(I1).GT.0.5*BODY(N+IPAIR)) STOP
               CALL KSTERM
               CALL KICK(I,1,KW1,DM)
               write(*,*) "asigning kick to single object"
@@ -389,7 +399,7 @@
    35             FORMAT (' WD/NS BINARY    KW R/A A M V ',
      &                                      I4,3F7.2,3F7.1)
               END IF
-          ELSE
+           ELSE
 *       Set new binary indicator and Roche look-up time (ECC > 0 is OK).
               KSTAR(I) = 0
               CALL TRFLOW(IPAIR,DTR)
