@@ -86,11 +86,11 @@
       IF (MAX(KSTAR(I1),KSTAR(I2)).EQ.14) THEN
           !DM1 = 0.5*BODY(I1)*ZMBAR
           !MMadd: make dm = mstar
-          DM1 = BODY(I1)*ZMBAR
+          DM2 = BODY(I2)*ZMBAR
         
 *       Conserve total mass and specific energy (H = const here).
-          M1 = M1 - DM1
-          M2 = M2 + DM1
+          M1 = M1 + DM2
+          M2 = M2 - DM2
           R1 = RADIUS(I1)*SU
           R2 = RADIUS(I2)*SU
 *       Transform to positive radial velocity and obtain global coordinates.
@@ -109,7 +109,8 @@
           !COALS = .FALSE.
           !IF(KSTAR(I2).EQ.14.AND.KSTAR(I1).GE.13) COALS = .TRUE.
           SEMI = SEMI0
-          ISKIP = 1
+          ISKIP = 0 ! shouldn't matter with coals = true
+          !ISKIP = 1
           !KW1 = 15 ! send disrupted object as massless ghost
 *       Skip common envelope part for BH + star interaction
           GO TO 4
