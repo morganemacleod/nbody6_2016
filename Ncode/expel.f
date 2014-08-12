@@ -45,7 +45,7 @@
          IF(BODY(I2).GT. BODY(I1))THEN
             II = I1
             I1 = I2
-            I2 = I1
+            I2 = II
          ENDIF
       ENDIF
 
