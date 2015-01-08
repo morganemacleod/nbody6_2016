@@ -133,7 +133,7 @@ C avoids binaries fromed ith the BH
       enddo
            
       flag=0
-      if(mbh.le.0.005) flag = 100
+      if(mbh.le.0.001) flag = 100
       do i=1,mtn
          if(mtm(i).eq.mbh) then
             flag=flag+1
