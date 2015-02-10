@@ -134,6 +134,7 @@ c--------------endMTadd-------------------------
 *
           WRITE (6,35)  GMG, RG0, OMEGA, RTIDE, RBAR
 *
+       endif                    ! MTadd (closes if statement added above )
 *       Perform an energy scaling iteration to include ETIDE (once is OK).
       E0 = -0.25
       CALL XTRNLV(1,N)

@@ -412,7 +412,7 @@
                        ! call CMBODY to do the encounter
                        CALL KSPERI(IPAIR)
                        KSPAIR = IPAIR
-                       IQCOLL = -2
+                       IQCOLL = 1 !-2
                        CALL CMBODY(QPERI,2)
                     ! tidal encounter without disruption
                     ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
@@ -588,7 +588,7 @@
                    ! call CMBODY to do the encounter
                    CALL KSPERI(IPAIR)
                    KSPAIR = IPAIR
-                   IQCOLL = -2
+                   IQCOLL = 1 !-2
                    CALL CMBODY(QPERI,2)
                    ! tidal encounter without disruption
                 ELSEIF(QPERI.GT.RTD.AND.QPERI.LE.RTDF) THEN
