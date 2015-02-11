@@ -62,7 +62,7 @@
      &               ZLMSTY(NMAX),FIDOT(3,NMAX),D0(3,NMAX),
      &               FRDOT(3,NMAX),D0R(3,NMAX),KSTAR(NMAX)
     
- *
+*
       COMMON/PAIRS/  U(4,KMAX),U0(4,KMAX),UDOT(4,KMAX),FU(4,KMAX),
      &               FUDOT(4,KMAX),FUDOT2(4,KMAX),FUDOT3(4,KMAX),
      &               H(KMAX),HDOT(KMAX),HDOT2(KMAX),HDOT3(KMAX),

@@ -4,7 +4,7 @@ c  written by Michele Trenti 2005
 c  this program comes with no warranty
 
        integer mtNMAX,mtNMASS
-       parameter(mtNMAX=200000,mtNMASS=27)
+       parameter(mtNMAX=230000,mtNMASS=27)
 
        double precision  mtx,mtvx,mtm,mttime,mtdr
        integer mtNTOT,mtNS,mtNB,mtIFIRST,mtN,mtNZERO
