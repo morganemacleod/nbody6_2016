@@ -38,7 +38,8 @@
           VINF = 0.0
 *
 *       Define indicator for different cases, including hyperbolic KS.
-          IF ((KSTAR(I).LE.10.AND.IQCOLL.NE.0).OR.IQCOLL.EQ.-2) THEN
+! MMadd: changing this to include WDs
+          IF ((KSTAR(I).LE.12.AND.IQCOLL.NE.0).OR.IQCOLL.EQ.-2) THEN
               WHICH1 = ' BINARY '
               IQCOLL = 0
               EB1 = BODY(2*IPAIR-1)*BODY(2*IPAIR)*H(IPAIR)/BODY(I)

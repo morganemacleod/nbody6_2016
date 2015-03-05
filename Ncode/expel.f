@@ -89,7 +89,7 @@
           DM2 = BODY(I2)*ZMBAR
         
 *       Conserve total mass and specific energy (H = const here).
-          M1 = M1 + DM2
+          M1 = M1 + 0.5*DM2
           M2 = M2 - DM2
           R1 = RADIUS(I1)*SU
           R2 = RADIUS(I2)*SU
