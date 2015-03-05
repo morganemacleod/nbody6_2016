@@ -19,6 +19,10 @@
 *       Find smallest sum by looping backwards (avoids multiple entries).
           DO 4 K = NNTB,1,-1
               J = KBLIST(K)
+              ! MMadd:
+              IF(J.EQ.0) THEN 
+                 GO TO 1
+              ENDIF
               TJ = T0(J) + STEP(J)
               IF (TJ.LT.TI) THEN
                   TI = TJ
