@@ -5,7 +5,7 @@
 *       ---------------------------------------------------
 *
       INCLUDE 'common6.h'
-      PARAMETER (VFAC=1.D0)
+      PARAMETER (VFAC=2.5D0)
       REAL*8  RAN2,VK(4)
       SAVE  IPAIR, KC, VDIS, RI
       DATA  IPAIR,KC /0,0/
